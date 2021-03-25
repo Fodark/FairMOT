@@ -31,6 +31,7 @@ def resize_image(image, max_size=800):
     return image
 
 
+# keep track of last 30 points per track
 pts = [deque(maxlen = 30) for _ in range(9999)]
 def plot_tracking(image, tlwhs, obj_ids, scores=None, frame_id=0, fps=0., ids2=None):
     im = np.ascontiguousarray(np.copy(image))
@@ -59,6 +60,7 @@ def plot_tracking(image, tlwhs, obj_ids, scores=None, frame_id=0, fps=0., ids2=N
         cv2.putText(im, id_text, (intbox[0], intbox[1] + 30), cv2.FONT_HERSHEY_PLAIN, text_scale, (0, 0, 255),
                     thickness=text_thickness)
         
+        # draw track for each bbox
         center = ((round(x1+w/2),round(y1+h/2)))
         pts[obj_id].append(center)
         cv2.circle(im,(round(x1+w/2),round(y1+h/2)),1,color,5)

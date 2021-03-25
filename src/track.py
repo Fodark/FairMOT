@@ -83,6 +83,7 @@ def eval_seq(opt, dataloader, data_type, result_filename, save_dir=None, show_im
         if show_image or save_dir is not None:
             online_im = vis.plot_tracking(img0, online_tlwhs, online_ids, frame_id=frame_id,
                                           fps=1. / timer.average_time)
+            # append face detection and blur them
             face_detector.predict(online_im, blur=True)
         if show_image:
             cv2.imshow('online_im', online_im)
