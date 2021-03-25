@@ -5,6 +5,7 @@
 
 import numpy as np
 import cv2
+from collections import deque
 
 
 def tlwhs_to_tlbrs(tlwhs):
@@ -30,6 +31,7 @@ def resize_image(image, max_size=800):
     return image
 
 
+pts = [deque(maxlen = 30) for _ in range(9999)]
 def plot_tracking(image, tlwhs, obj_ids, scores=None, frame_id=0, fps=0., ids2=None):
     im = np.ascontiguousarray(np.copy(image))
     im_h, im_w = im.shape[:2]
@@ -56,6 +58,15 @@ def plot_tracking(image, tlwhs, obj_ids, scores=None, frame_id=0, fps=0., ids2=N
         cv2.rectangle(im, intbox[0:2], intbox[2:4], color=color, thickness=line_thickness)
         cv2.putText(im, id_text, (intbox[0], intbox[1] + 30), cv2.FONT_HERSHEY_PLAIN, text_scale, (0, 0, 255),
                     thickness=text_thickness)
+        
+        center = ((round(x1+w/2),round(y1+h/2)))
+        pts[obj_id].append(center)
+        cv2.circle(im,(round(x1+w/2),round(y1+h/2)),1,color,5)
+        for j in range(1, len(pts[obj_id])):
+            if pts[obj_id][j-1] is None or pts[obj_id][j] is None:
+                continue
+            thickness = int(np.sqrt(64/float(j+1)) * 2)
+            cv2.line(im,(pts[obj_id][j-1]),(pts[obj_id][j]), color, thickness)
     return im
 
 
