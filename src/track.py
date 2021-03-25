@@ -56,7 +56,7 @@ def eval_seq(opt, dataloader, data_type, result_filename, save_dir=None, show_im
     if save_dir:
         mkdir_if_missing(save_dir)
     tracker = JDETracker(opt, frame_rate=frame_rate)
-    face_detector = FaceDetector(.8)
+    face_detector = FaceDetector(.8, base_dir="./lib/insightface/detection/RetinaFace/model/R50")
     timer = Timer()
     results = []
     frame_id = 0

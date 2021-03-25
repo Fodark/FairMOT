@@ -1,3 +1,4 @@
-[submodule "insightface"]
-	path = insightface
+
+[submodule "src/lib/insightface"]
+	path = src/lib/insightface
 	url = https://github.com/Fodark/insightface.git
