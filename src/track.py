@@ -27,6 +27,8 @@ import datasets.dataset.jde as datasets
 from tracking_utils.utils import mkdir_if_missing
 from opts import opts
 
+from insightface.detection.RetinaFace.detector import FaceDetector
+
 
 def write_results(filename, results, data_type):
     if data_type == 'mot':
@@ -54,6 +56,7 @@ def eval_seq(opt, dataloader, data_type, result_filename, save_dir=None, show_im
     if save_dir:
         mkdir_if_missing(save_dir)
     tracker = JDETracker(opt, frame_rate=frame_rate)
+    face_detector = FaceDetector(.8)
     timer = Timer()
     results = []
     frame_id = 0
@@ -80,6 +83,7 @@ def eval_seq(opt, dataloader, data_type, result_filename, save_dir=None, show_im
         if show_image or save_dir is not None:
             online_im = vis.plot_tracking(img0, online_tlwhs, online_ids, frame_id=frame_id,
                                           fps=1. / timer.average_time)
+            face_detector.predict(online_im, blur=True)
         if show_image:
             cv2.imshow('online_im', online_im)
         if save_dir is not None:
